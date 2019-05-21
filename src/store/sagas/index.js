@@ -1,7 +1,10 @@
 import { all, takeLatest } from "redux-saga/effects";
 import { Types as HeroTypes } from "../ducks/hero";
-import { getHero } from "./hero";
+import { getHero, getMoreHero } from "./hero";
 
 export default function* rootSaga() {
-  yield all([takeLatest(HeroTypes.ADD_REQUEST, getHero)]);
+  yield all([
+    takeLatest(HeroTypes.ADD_REQUEST, getHero),
+    takeLatest(HeroTypes.ADD_MORE_REQUEST, getMoreHero)
+  ]);
 }

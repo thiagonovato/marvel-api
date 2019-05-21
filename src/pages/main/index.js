@@ -13,6 +13,7 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Modal from "@material-ui/core/Modal";
+import Button from "@material-ui/core/Button";
 
 // Importação Styles
 import styles from "./Styles";
@@ -41,6 +42,10 @@ class Main extends Component {
   componentDidMount() {
     this.props.getHeroRequest();
   }
+
+  maisHero = () => {
+    this.props.getMoreHeroRequest(this.props.hero.count, 20);
+  };
 
   handleOpen = hero => {
     this.setState({ open: true, hero });
@@ -83,6 +88,19 @@ class Main extends Component {
                 </Grid>
               ))
             )}
+          {!hero.loading && (
+            <Grid container spacing={40}>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={this.maisHero}
+                disabled={hero.loadingMore}
+              >
+                {hero.loadingMore ? "Carregando..." : "Ver mais"}
+              </Button>
+            </Grid>
+          )}
         </Grid>
         <Modal
           aria-labelledby="simple-modal-title"
@@ -91,8 +109,36 @@ class Main extends Component {
           onClose={this.handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
+            <Typography variant="caption">ID: {this.state.hero.id}</Typography>
             <Typography variant="h6" id="modal-title">
-              {this.state.hero.name}
+              Nome: {this.state.hero.name}
+            </Typography>
+            <Typography variant="subtitle1" id="simple-modal-description">
+              <strong>Descrição:</strong> {this.state.hero.description}
+              <Typography variant="body1">
+                <strong>Qtde. de Quadrinhos: </strong>
+                {this.state.hero.comics
+                  ? this.state.hero.comics.available
+                    ? this.state.hero.comics.available
+                    : "Sem informação"
+                  : "Não tem quadrinhos"}
+              </Typography>
+              <Typography variant="body1">
+                <strong>Qtde. de Séries: </strong>
+                {this.state.hero.series
+                  ? this.state.hero.series.available
+                    ? this.state.hero.series.available
+                    : "Sem informação"
+                  : "Não tem séries"}
+              </Typography>
+              <Typography variant="body1">
+                <strong>Qtde. de Stories: </strong>
+                {this.state.hero.stories
+                  ? this.state.hero.stories.available
+                    ? this.state.hero.stories.available
+                    : "Sem informação"
+                  : "Não tem stories"}
+              </Typography>
             </Typography>
           </div>
         </Modal>
@@ -103,7 +149,8 @@ class Main extends Component {
 
 const mapStateToProps = state => ({
   loading: state.loading,
-  hero: state.hero
+  hero: state.hero,
+  count: state.count
 });
 
 const mapDispatchToProps = dispatch =>
