@@ -7,7 +7,7 @@ let codg = md5(
 );
 
 const api = axios.create({
-  baseURL: "http://gateway.marvel.com",
+  baseURL: "https://gateway.marvel.com",
   params: { apikey: process.env.REACT_APP_API_KEY, ts: ts, hash: codg }
 });
 
